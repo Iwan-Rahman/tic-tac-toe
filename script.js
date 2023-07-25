@@ -1,14 +1,21 @@
-const gridCell = () => {
-  //Cell value should be empty, "x" or "o"
-  let value = "";
-  return {value}
-}
-
 const gameBoard = (() => {
-  grid = [gridCell(),gridCell(),gridCell(),gridCell(),gridCell(),gridCell(),gridCell(),gridCell(),gridCell()];
+  grid = document.querySelectorAll("td");
   return grid;
 })();
 
 const Player = (name, sign) => {
   return {name, sign};
 }
+
+const gameFlow = (playerOne, playerTwo) => {
+  //Player one starts the game
+  let activePlayer = playerOne;
+
+  gameBoard.forEach(cell => {
+    cell.addEventListener("click", () => {
+      cell.textContent = activePlayer.sign;
+      activePlayer = playerTwo;
+    });
+  });
+}
+
