@@ -10,17 +10,19 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-size: 1rem;
 }
 
 table {
   border: 2px solid black;
   border-collapse: collapse;
-  width: 40vw;
-  aspect-ratio: 1;
+  min-width: min(80vw,80vh);
+  min-height: min(80vw,80vh);
 }
 
 td {
   border: 2px solid black;
-  width: 10vw;
+  width: calc(100% / 3);
+  height: calc(100% /3);
   
 }
