@@ -19,7 +19,7 @@ const gameFlow = (playerOne, playerTwo) => {
       if(cell.textContent == ''){
         cell.textContent = activePlayer.sign;
         
-        checkCol(activePlayer);
+        checkDiag(activePlayer);
 
         let temp = activePlayer;
         activePlayer = inactivePlayer;
@@ -59,5 +59,25 @@ function checkCol(activePlayer){
 
   return false;
 };
-// function checkDiagonal(){};
 
+function checkDiag(activePlayer){
+  //Going from top left to bottom right
+  let totalDiagSignsLeft = 0;
+
+  for(let row = 1, col = 1; row < 4; row++, col++){
+    totalDiagSignsLeft += (document.querySelector(`tr:nth-child(${row}) > td:nth-child(${col})`).textContent == activePlayer.sign);
+  }
+
+  //Going from top right to bottom left
+  let totalDiagSignsRight = 0;
+  
+  for(let row = 1, col = 3; row < 4; row++, col--){
+    totalDiagSignsRight += (document.querySelector(`tr:nth-child(${row}) > td:nth-child(${col})`).textContent == activePlayer.sign);
+  }
+
+  if(totalDiagSignsLeft == 3 || totalDiagSignsRight == 3){
+    return true;
+  }else{
+    return false;
+  }
+};
