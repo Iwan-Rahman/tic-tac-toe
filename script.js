@@ -19,7 +19,7 @@ const gameFlow = (playerOne, playerTwo) => {
       if(cell.textContent == ''){
         cell.textContent = activePlayer.sign;
         
-        checkRow(activePlayer);
+        checkCol(activePlayer);
 
         let temp = activePlayer;
         activePlayer = inactivePlayer;
@@ -46,6 +46,18 @@ function checkRow(activePlayer){
   return false;
 };
 
-function checkColoumn(activePlayer){};
+function checkCol(activePlayer){
+  for(let col = 1; col < 4; col++){
+    let totalColSigns = Array.from(document.querySelectorAll(`tr > td:nth-child(${col})`)).reduce((total, cell) => {
+      return total += (cell.textContent == activePlayer.sign); 
+    },0)
+    
+    if(totalColSigns == 3){
+      return true;
+    }
+  }
+
+  return false;
+};
 // function checkDiagonal(){};
 
