@@ -8,3 +8,7 @@ const gameBoard = (() => {
   grid = [gridCell(),gridCell(),gridCell(),gridCell(),gridCell(),gridCell(),gridCell(),gridCell(),gridCell()];
   return grid;
 })();
+
+const Player = (name, sign) => {
+  return {name, sign};
+}
