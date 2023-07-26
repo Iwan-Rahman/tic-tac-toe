@@ -85,3 +85,16 @@ function checkDiag(activePlayer){
     return false;
   }
 };
+
+const settings = () => {
+  document.querySelector("img").addEventListener("click",() => {
+    document.querySelector(".settings").style.display = "flex";
+  })
+
+  document.querySelector(".settings-btn > button").addEventListener("click",() => {
+  })
+
+  document.querySelector(".settings-btn > button:last-child").addEventListener("click",() => {
+    document.querySelector(".settings").style.display = "none";
+  })
+}
