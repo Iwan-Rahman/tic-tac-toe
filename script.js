@@ -9,7 +9,8 @@ const Player = (name, sign) => {
 const playerOne = Player("Bob","X");
 const playerTwo = Player("Tom","O");
 
-const gameFlow = (playerOne, playerTwo) => {
+const gameFlow = ((playerOne, playerTwo) => {
+  console.log(this);
   //Player one starts the game
   let activePlayer = playerOne;
   let inactivePlayer = playerTwo;
@@ -28,7 +29,7 @@ const gameFlow = (playerOne, playerTwo) => {
       }
     });
   });
-}
+})(playerOne,playerTwo);
 
 function checkWinner(activePlayer){
   if(checkRow(activePlayer) || checkCol(activePlayer) || checkDiag(activePlayer)){
@@ -86,7 +87,7 @@ function checkDiag(activePlayer){
   }
 };
 
-const settings = () => {
+const settings = (() => {
   document.querySelector("img").addEventListener("click",() => {
     document.querySelector(".settings").style.display = "flex";
   })
@@ -99,9 +100,11 @@ const settings = () => {
     document.querySelector(".settings").style.display = "none";
     clearSettings();
   })
-}
+})();
 
 function applyStyle(playerOne,playerTwo){
+  console.log(playerOne);
+  console.log(playerTwo);
   let oldSignOne = playerOne.sign;
   let oldSignTwo = playerTwo.sign;
 
