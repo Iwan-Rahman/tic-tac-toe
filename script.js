@@ -54,6 +54,8 @@ const gameFlow = ((playerOne, playerTwo) => {
 function checkWinner(activePlayer){
   if(checkRow(activePlayer) || checkCol(activePlayer) || checkDiag(activePlayer)){
     console.log("YOU ARE A WINNER!");
+  }else if(checkBoardFilled()){
+    console.log("It's a tie");
   }
   function checkRow(activePlayer){
     for(row of document.querySelectorAll("tr")){
@@ -98,12 +100,15 @@ function checkWinner(activePlayer){
       totalDiagSignsRight += (document.querySelector(`tr:nth-child(${row}) > td:nth-child(${col})`).textContent == activePlayer.sign);
     }
   
-    if(totalDiagSignsLeft == 3 || totalDiagSignsRight == 3){
-      return true;
-    }else{
-      return false;
-    }
+    return (totalDiagSignsLeft == 3 || totalDiagSignsRight == 3)
   };
+
+  function checkBoardFilled(){
+    let totalCellsFilled = (Array.from(gameBoard)).reduce((total,cell) => {
+      return total += (cell.textContent != "");
+    },0)
+    return (totalCellsFilled == 9); 
+  }
 
 };
 
