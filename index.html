@@ -9,65 +9,67 @@
   <link href="https://fonts.googleapis.com/css2?family=REM&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="header">
-    <h1><span style="color:orangered;">Tic</span>-<span style="color:dodgerblue;">Tac</span>-<span style="color:limegreen;">Toe</span></h1>
-    <img src="./cogs.svg" alt="settings">
+  <div class="main">
+    <div class="header">
+      <h1><span style="color:orangered;">Tic</span>-<span style="color:dodgerblue;">Tac</span>-<span style="color:limegreen;">Toe</span></h1>
+      <img src="./cogs.svg" alt="settings">
+    </div>
+    <table>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
   </div>
-  <table>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-  </table>
-  <div class="controller-display"></div>
-  <div class="settings">
-    <div>
-      <h3>Player One</h3>
+  <div class="settings-wrapper">
+    <div class="settings">
       <div>
+        <h3>Player One</h3>
         <div>
-          <label for="playerOneName">Name:</label>
-          <input type="text" id="playerOneName">
-        </div>
-        <div>
-          <label for="playerOneSign">Sign:</label>
-          <input type="text" id="playerOneSign" maxlength="1">
+          <div>
+            <label for="playerOneName">Name:</label>
+            <input type="text" id="playerOneName">
+          </div>
+          <div>
+            <label for="playerOneSign">Sign:</label>
+            <input type="text" id="playerOneSign" maxlength="1">
+          </div>
         </div>
       </div>
-    </div>
-    <div>
-      <input type="radio" id="player" name="opponent" onclick="playerTwoInput.enable()">
-      <label for="player"><img src="./alien.svg" alt="alien" ></label>
-
-      <input type="radio" id="computer" name="opponent" onclick="playerTwoInput.disable()">
-      <label for="computer"><img src="./robot.svg" alt="bot"></label>
-    </div>
-    <div>
-      <h3>Player Two</h3>
       <div>
+        <input type="radio" id="player" name="opponent" onclick="playerTwoInput.enable()">
+        <label for="player"><img src="./alien.svg" alt="alien" ></label>
+        <input type="radio" id="computer" name="opponent" onclick="playerTwoInput.disable()">
+        <label for="computer"><img src="./robot.svg" alt="bot"></label>
+      </div>
+      <div>
+        <h3>Player Two</h3>
         <div>
-          <label for="playerTwoName">Name:</label>
-          <input type="text" id="playerTwoName">
-        </div>
-        <div>
-          <label for="playerTwoSign">Sign:</label>
-          <input type="text" id="playerTwoSign" maxlength="1">
+          <div>
+            <label for="playerTwoName">Name:</label>
+            <input type="text" id="playerTwoName">
+          </div>
+          <div>
+            <label for="playerTwoSign">Sign:</label>
+            <input type="text" id="playerTwoSign" maxlength="1">
+          </div>
         </div>
       </div>
-    </div>
-    <div class="settings-btn">
-      <button>Apply</button>
-      <button>Close</button>
+      <div class="settings-btn">
+        <button>Apply</button>
+        <button>Close</button>
+      </div>
     </div>
   </div>
 </body>

@@ -3,7 +3,7 @@
   padding: 0;
 }
 
-body {
+body, .main {
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -54,7 +54,7 @@ td {
   padding: 1%;
   color: black;
   border: 0.8vw double silver;
-  display: none;
+  display: flex;
 }
 
 .settings > div > div {
@@ -121,4 +121,13 @@ label[for="computer"] > img {
 
 .settings > div:nth-child(2) > input:checked + label{
   background-color:violet;
+}
+
+.settings-wrapper {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
 }

@@ -109,7 +109,8 @@ function checkWinner(activePlayer){
 
 const settings = (() => {
   document.querySelector("img").addEventListener("click",() => {
-    document.querySelector(".settings").style.display = "flex";
+    document.querySelector(".settings-wrapper").style.display = "flex";
+    document.querySelector(".main").style.filter = "Blur(5px)";
   })
 
   document.querySelector(".settings-btn > button").addEventListener("click",() => {
@@ -117,7 +118,8 @@ const settings = (() => {
   })
 
   document.querySelector(".settings-btn > button:last-child").addEventListener("click",() => {
-    document.querySelector(".settings").style.display = "none";
+    document.querySelector(".settings-wrapper").style.display = "none";
+    document.querySelector(".main").style.filter = "none";
     clearSettings();
   })
 
