@@ -53,9 +53,13 @@ const gameFlow = ((playerOne, playerTwo) => {
 
 function checkWinner(activePlayer){
   if(checkRow(activePlayer) || checkCol(activePlayer) || checkDiag(activePlayer)){
-    console.log("YOU ARE A WINNER!");
+    document.querySelector(".controller-display > div").textContent = `${activePlayer.name} Wins!`;
+    document.querySelector(".controller-display").style.display = "flex";
+    document.querySelector(".main").style.filter = "Blur(5px)";
   }else if(checkBoardFilled()){
-    console.log("It's a tie");
+    document.querySelector(".controller-display > div").textContent = "TIE!";
+    document.querySelector(".controller-display").style.display = "flex";
+    document.querySelector(".main").style.filter = "Blur(5px)";
   }
   function checkRow(activePlayer){
     for(row of document.querySelectorAll("tr")){
@@ -129,8 +133,6 @@ const settings = (() => {
   })
 
   function applyStyle(playerOne,playerTwo){
-    console.log(playerOne);
-    console.log(playerTwo);
     let oldSignOne = playerOne.sign;
     let oldSignTwo = playerTwo.sign;
   

@@ -39,8 +39,18 @@ td {
   border-radius: 1vw;
 }
 
-.controller-display {
-  position: absolute;
+.controller-display  {
+  position:absolute;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  flex-direction: column;
+  gap: min(5vw,5vh);
+  justify-content: center;
+  align-items: center;
+}
+
+.controller-display > div:first-child {
   font-size: min(15vw,15vh);
   transition: 0.5s;
 }
