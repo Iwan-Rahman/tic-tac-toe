@@ -6,8 +6,8 @@ const gameBoard = (() => {
 const Player = (name, sign) => {
   return {name, sign};
 }
-const bob = Player("Bob","X");
-const tom = Player("Tom","O");
+const playerOne = Player("Bob","X");
+const playerTwo = Player("Tom","O");
 
 const gameFlow = (playerOne, playerTwo) => {
   //Player one starts the game
@@ -92,9 +92,34 @@ const settings = () => {
   })
 
   document.querySelector(".settings-btn > button").addEventListener("click",() => {
+    applyStyle(playerOne,playerTwo);
   })
 
   document.querySelector(".settings-btn > button:last-child").addEventListener("click",() => {
     document.querySelector(".settings").style.display = "none";
+    clearSettings();
   })
+}
+
+function applyStyle(playerOne,playerTwo){
+  let oldSignOne = playerOne.sign;
+  let oldSignTwo = playerTwo.sign;
+
+  playerOne.name = document.querySelector("#playerOneName").value;
+  playerOne.sign = document.querySelector("#playerOneSign").value;
+
+  playerTwo.name = document.querySelector("#playerTwoName").value;
+  playerTwo.sign = document.querySelector("#playerTwoSign").value;
+
+  gameBoard.forEach(cell => {
+    if(cell.textContent == oldSignOne){
+      cell.textContent = playerOne.sign;
+    }else if(cell.textContent == oldSignTwo){
+      cell.textContent = playerTwo.sign;
+    }
+  })
+}
+
+function clearSettings(){
+  document.querySelectorAll(".settings input").forEach(inp => inp.value = "");
 }
