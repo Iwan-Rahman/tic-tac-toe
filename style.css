@@ -11,20 +11,36 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 1rem;
+  background-color: black;
+  color: white;
+  gap: 2vh;
+  font-family: REM, 'Arial Narrow Bold', sans-serif;
 }
 
 table {
-  border: 2px solid black;
-  border-collapse: collapse;
+  border: none;
+  border-collapse: separate;
   min-width: min(80vw,80vh);
   min-height: min(80vw,80vh);
   text-align: center;
   font-size: min(10vw,10vh);
+  
+  background-image: conic-gradient(red, yellow, lime, aqua, blue, magenta, red); /* the gradient */
+  background-origin: border-box; /* set background to start from border-box */
+  border-spacing: 0.4vw; /* space between each cell */ 
+  border-radius: 2vw;
+  padding: 0.5vw;
 }
 
 td {
-  border: 2px solid black;
+  background-color: black;
   width: calc(100% / 3);
   height: calc(100% /3);
-  
+  border-radius: 1vw;
+}
+
+.controller-display {
+  position: absolute;
+  font-size: min(15vw,15vh);
+  transition: 0.5s;
 }

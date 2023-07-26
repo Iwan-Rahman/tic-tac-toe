@@ -33,8 +33,6 @@ const gameFlow = (playerOne, playerTwo) => {
 function checkWinner(activePlayer){
   if(checkRow(activePlayer) || checkCol(activePlayer) || checkDiag(activePlayer)){
     console.log("YOU ARE A WINNER!");
-  }else{
-    console.log("Boop");
   }
 };
 
@@ -45,7 +43,7 @@ function checkRow(activePlayer){
     },0)
     
     if(totalRowSigns == 3){
-      return true;
+      // return true;
     }
   }
 
