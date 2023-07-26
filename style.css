@@ -83,3 +83,42 @@ img {
   width: min(5vw,5vh);
   aspect-ratio: 1;
 }
+
+input[type="radio"] {
+  width: 0;
+  height: 0;
+}
+
+.settings > div:nth-child(2) {
+  display: flex;
+  justify-content: center;
+  gap: 2vw;
+}
+
+.settings > div:nth-child(2) > label{
+  border-radius: 50%;
+  width: min(6vw,6vh);
+  height: min(6vw,6vh);
+  position: relative;
+  text-align: center;
+}
+label > img {
+  width: min(5vw,5vh);
+  height: min(5vw,5vh);
+}
+
+label[for="player"] > img {
+  position: absolute;
+  top: 9%;
+  left: 11%;
+}
+
+label[for="computer"] > img {
+  position: absolute;
+  top: 2%;
+  left: 7.5%;
+}
+
+.settings > div:nth-child(2) > input:checked + label{
+  background-color:violet;
+}
