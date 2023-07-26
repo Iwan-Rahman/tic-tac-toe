@@ -126,3 +126,13 @@ function applyStyle(playerOne,playerTwo){
 function clearSettings(){
   document.querySelectorAll(".settings input").forEach(inp => inp.value = "");
 }
+
+function disablePlayerTwo(){
+  document.querySelector("#playerTwoName").disabled = true;
+  document.querySelector("#playerTwoSign").disabled = true;
+}
+
+function enablePlayerTwo(){
+  document.querySelector("#playerTwoName").disabled = false;
+  document.querySelector("#playerTwoSign").disabled = false;
+}
