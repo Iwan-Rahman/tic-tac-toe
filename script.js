@@ -1,5 +1,6 @@
 const gameBoard = (() => {
   grid = document.querySelectorAll("td");
+  gridHover = document.querySelectorAll("td::before");
   return grid;
 })();
 
@@ -13,12 +14,32 @@ const gameFlow = ((playerOne, playerTwo) => {
   //Player one starts the game
   let activePlayer = playerOne;
   let inactivePlayer = playerTwo;
+  let hoverEffect = false;
+
+  const highlight = (() => {
+    gameBoard.forEach(cell => {
+      cell.addEventListener("mouseenter", () => {
+        if(cell.textContent == ""){
+          cell.textContent = activePlayer.sign;
+          cell.style.color = "rgb(245, 245, 245,0.7)"
+          hoverEffect = true;
+        }
+      })
+
+      cell.addEventListener("mouseleave", () => {
+        if(hoverEffect == true){
+          cell.textContent = "";
+          hoverEffect = false;
+        }
+      })
+    })
+  })();
 
   gameBoard.forEach(cell => {
     cell.addEventListener("click", () => {
-      if(cell.textContent == ''){
-        cell.textContent = activePlayer.sign;
-        
+      if(hoverEffect){
+        cell.style.color = "rgb(245, 245, 245,1)"
+        hoverEffect = false;
         checkWinner(activePlayer);
 
         let temp = activePlayer;
