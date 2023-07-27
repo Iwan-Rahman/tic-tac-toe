@@ -39,7 +39,7 @@ td {
   border-radius: 1vw;
 }
 
-.controller-display  {
+.gameover  {
   position:absolute;
   width: 100vw;
   height: 100vh;
@@ -50,7 +50,7 @@ td {
   align-items: center;
 }
 
-.controller-display > div:first-child {
+.gameover > div:first-child {
   font-size: min(15vw,15vh);
   transition: 0.5s;
 }
@@ -86,9 +86,21 @@ button {
 }
 
 .header {
-  display: flex;
-  margin-left: min(5vw,5vh);
+  min-width: min(90vw,90vh);
+  margin-left: min(10vw,10vh);
+  display: grid;
+  grid-template-columns: min(80vw,80vh) min(10vw,10vh);
+  justify-items: center;
+  box-sizing: border-box;
 }
+
+.header div {
+  display: flex;
+  gap: 0.5vw;
+  translate: max(-12vw,-12vh) 0;
+}
+
+
 img {
   width: min(5vw,5vh);
   aspect-ratio: 1;

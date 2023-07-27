@@ -1,7 +1,14 @@
 const gameBoard = (() => {
   grid = document.querySelectorAll("td");
-  gridHover = document.querySelectorAll("td::before");
-  return grid;
+
+  let clear = () => {
+    grid.forEach(cell => {
+      cell.textContent = "";
+    })
+
+    document.querySelector(".gameover > div").textContent = "";
+  }
+  return {grid,clear};
 })();
 
 const Player = (name, sign) => {
@@ -17,7 +24,7 @@ const gameFlow = ((playerOne, playerTwo) => {
   let hoverEffect = false;
 
   const highlight = (() => {
-    gameBoard.forEach(cell => {
+    gameBoard.grid.forEach(cell => {
       cell.addEventListener("mouseenter", () => {
         if(cell.textContent == ""){
           cell.textContent = activePlayer.sign;
@@ -33,9 +40,10 @@ const gameFlow = ((playerOne, playerTwo) => {
         }
       })
     })
+
   })();
 
-  gameBoard.forEach(cell => {
+  gameBoard.grid.forEach(cell => {
     cell.addEventListener("click", () => {
       if(hoverEffect){
         cell.style.color = "rgb(245, 245, 245,1)"
@@ -49,16 +57,24 @@ const gameFlow = ((playerOne, playerTwo) => {
       }
     });
   });
+
+  const reset = () => {
+    activePlayer = playerOne;
+    inactivePlayer = playerTwo;
+    hoverEffect = false;
+  }
+
+  return {reset}
 })(playerOne,playerTwo);
 
 function checkWinner(activePlayer){
   if(checkRow(activePlayer) || checkCol(activePlayer) || checkDiag(activePlayer)){
-    document.querySelector(".controller-display > div").textContent = `${activePlayer.name} Wins!`;
-    document.querySelector(".controller-display").style.display = "flex";
+    document.querySelector(".gameover > div").textContent = `${activePlayer.name} Wins!`;
+    document.querySelector(".gameover").style.display = "flex";
     document.querySelector(".main").style.filter = "Blur(5px)";
   }else if(checkBoardFilled()){
-    document.querySelector(".controller-display > div").textContent = "TIE!";
-    document.querySelector(".controller-display").style.display = "flex";
+    document.querySelector(".gameover > div").textContent = "TIE!";
+    document.querySelector(".gameover").style.display = "flex";
     document.querySelector(".main").style.filter = "Blur(5px)";
   }
   function checkRow(activePlayer){
@@ -108,7 +124,7 @@ function checkWinner(activePlayer){
   };
 
   function checkBoardFilled(){
-    let totalCellsFilled = (Array.from(gameBoard)).reduce((total,cell) => {
+    let totalCellsFilled = (Array.from(gameBoard.grid)).reduce((total,cell) => {
       return total += (cell.textContent != "");
     },0)
     return (totalCellsFilled == 9); 
@@ -142,7 +158,7 @@ const settings = (() => {
     playerTwo.name = document.querySelector("#playerTwoName").value;
     playerTwo.sign = document.querySelector("#playerTwoSign").value;
   
-    gameBoard.forEach(cell => {
+    gameBoard.grid.forEach(cell => {
       if(cell.textContent == oldSignOne){
         cell.textContent = playerOne.sign;
       }else if(cell.textContent == oldSignTwo){
@@ -169,3 +185,13 @@ const playerTwoInput = (() => {
 
   return {enable,disable}
 })()
+
+document.querySelector(".gameover > div:last-child").addEventListener("click",reset);
+document.querySelector(".header > div").addEventListener("click",reset);
+
+function reset(){
+  gameBoard.clear();
+  document.querySelector(".gameover").style.display = "none";
+  document.querySelector(".main").style.filter = "none";
+  gameFlow.reset();
+}
