@@ -11,12 +11,11 @@ const gameBoard = (() => {
   return {grid,clear};
 })();
 
-const Player = (name, sign) => {
-  return {name, sign};
+const Player = (name, sign, isComputer = false) => {
+  return {name, sign, isComputer};
 }
-let playerOne = Player("Bob","X");
-let playerTwo = Player("Tom","O");
-const computer = Player("AI","!");
+var playerOne = Player("Bob","X");
+var playerTwo = Player("Tom","O");
 
 const gameFlow = ((playerOne, playerTwo) => {
   //Player one starts the game
@@ -24,54 +23,71 @@ const gameFlow = ((playerOne, playerTwo) => {
   let inactivePlayer = playerTwo;
   let hoverEffect = false;
 
-  if(activePlayer == computer){
-    // computerMove();
-  }else{
-    const highlight = (() => {
-      gameBoard.grid.forEach(cell => {
-        cell.addEventListener("mouseenter", () => {
-          if(cell.textContent == ""){
-            cell.textContent = activePlayer.sign;
-            cell.style.color = "rgb(245, 245, 245,0.7)"
-            hoverEffect = true;
-          }
-        })
-  
-        cell.addEventListener("mouseleave", () => {
-          if(hoverEffect == true){
-            cell.textContent = "";
-            hoverEffect = false;
-          }
-        })
-      })
-  
-    })();
-  
+  const highlight = (() => {
     gameBoard.grid.forEach(cell => {
-      cell.addEventListener("click", () => {
-        if(hoverEffect){
-          cell.style.color = "rgb(245, 245, 245,1)"
+      cell.addEventListener("mouseenter", () => {
+        if (cell.textContent == "") {
+          cell.textContent = activePlayer.sign;
+          cell.style.color = "rgb(245, 245, 245,0.7)"
+          hoverEffect = true;
+        }
+      })
+
+      cell.addEventListener("mouseleave", () => {
+        if (hoverEffect == true) {
+          cell.textContent = "";
           hoverEffect = false;
-          checkWinner(activePlayer);
-  
+        }
+      })
+    })
+
+  })();
+
+  gameBoard.grid.forEach(cell => {
+    cell.addEventListener("click", () => {
+      if (hoverEffect) {
+        cell.style.color = "rgb(245, 245, 245,1)"
+        hoverEffect = false;
+
+        
+        if(checkWinner(activePlayer) == undefined){
           let temp = activePlayer;
           activePlayer = inactivePlayer;
           inactivePlayer = temp;
   
+          if(activePlayer.isComputer == true){
+            computerMove()
+          }
         }
-      });
+      }
     });
+  });
   
-  }
   
-  const reset = () => {
-    activePlayer = playerOne;
-    inactivePlayer = playerTwo;
-    hoverEffect = false;
+  //Choose random available spot
+function computerMove(){
+  let move = Math.floor(Math.random()*gameBoard.grid.length);
+
+  if(gameBoard.grid[move].textContent == ""){
+    gameBoard.grid[move].textContent = activePlayer.sign;
+    checkWinner(activePlayer);
+    let temp = activePlayer;
+    activePlayer = inactivePlayer;
+    inactivePlayer = temp;
+  }else{
+    computerMove();
   }
+}
+
 
   //Creats a gameflow object with the reset function 
   //to help reset the grid, and active/inactive players.
+  const reset = () => {
+    activePlayer = this.playerOne;
+    inactivePlayer = this.playerTwo;
+    hoverEffect = false;
+  }
+
   return {reset}
 })(playerOne,playerTwo);
 
@@ -154,7 +170,7 @@ const settings = (() => {
   })
 
   document.querySelector(".settings-btn > button:last-child").addEventListener("click",() => {
-    if(playerTwo != computer){
+    if(playerTwo.isComputer == false){
       playerTwoInput.enable();
       document.querySelector("input[name='opponent']").checked = true;
     }else{
@@ -168,7 +184,7 @@ const settings = (() => {
   function applyStyle(){
     let oldSignOne = playerOne.sign;
     let oldSignTwo = playerTwo.sign;
-  
+    
     playerOne.name = document.querySelector("#playerOneName").value;
     playerOne.sign = document.querySelector("#playerOneSign").value;
 
@@ -176,7 +192,7 @@ const settings = (() => {
       playerTwo = Player(document.querySelector("#playerTwoName").textContent, 
       document.querySelector("#playerTwoSign").textContent);
     }else{
-      playerTwo = computer;
+      playerTwo.isComputer = true;
     }
     
     gameBoard.grid.forEach(cell => {
@@ -210,7 +226,7 @@ const settings = (() => {
 })();
 
 document.querySelector(".gameover > div:last-child").addEventListener("click",reset);
-document.querySelector(".header > div").addEventListener("click",reset);
+document.querySelector(".header img:last-child").addEventListener("click",reset);
 
 function reset(){
   gameBoard.clear();
@@ -220,18 +236,7 @@ function reset(){
 }
 
 
-//Choose random available spot
-// function computerMove(){
-//   let move = Math.floor(Math.random()*gameBoard.grid.length) + 1;
 
-//   if(gameBoard.grid[move].textContent == ""){
-//     gameBoard.grid[move].textContent = computer.sign;
-//     activePlayer = playerOne;
-//     inactivePlayer = computer;
-//   }else{
-//     computerMove();
-//   }
-// }
 
 // function minmax(){
 //   //If it is a terminal state
