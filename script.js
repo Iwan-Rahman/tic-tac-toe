@@ -14,8 +14,9 @@ const gameBoard = (() => {
 const Player = (name, sign) => {
   return {name, sign};
 }
-const playerOne = Player("Bob","X");
-const playerTwo = Player("Tom","O");
+let playerOne = Player("Bob","X");
+let playerTwo = Player("Tom","O");
+const computer = Player("AI","!");
 
 const gameFlow = ((playerOne, playerTwo) => {
   //Player one starts the game
@@ -23,47 +24,54 @@ const gameFlow = ((playerOne, playerTwo) => {
   let inactivePlayer = playerTwo;
   let hoverEffect = false;
 
-  const highlight = (() => {
+  if(activePlayer == computer){
+    // computerMove();
+  }else{
+    const highlight = (() => {
+      gameBoard.grid.forEach(cell => {
+        cell.addEventListener("mouseenter", () => {
+          if(cell.textContent == ""){
+            cell.textContent = activePlayer.sign;
+            cell.style.color = "rgb(245, 245, 245,0.7)"
+            hoverEffect = true;
+          }
+        })
+  
+        cell.addEventListener("mouseleave", () => {
+          if(hoverEffect == true){
+            cell.textContent = "";
+            hoverEffect = false;
+          }
+        })
+      })
+  
+    })();
+  
     gameBoard.grid.forEach(cell => {
-      cell.addEventListener("mouseenter", () => {
-        if(cell.textContent == ""){
-          cell.textContent = activePlayer.sign;
-          cell.style.color = "rgb(245, 245, 245,0.7)"
-          hoverEffect = true;
-        }
-      })
-
-      cell.addEventListener("mouseleave", () => {
-        if(hoverEffect == true){
-          cell.textContent = "";
+      cell.addEventListener("click", () => {
+        if(hoverEffect){
+          cell.style.color = "rgb(245, 245, 245,1)"
           hoverEffect = false;
+          checkWinner(activePlayer);
+  
+          let temp = activePlayer;
+          activePlayer = inactivePlayer;
+          inactivePlayer = temp;
+  
         }
-      })
-    })
-
-  })();
-
-  gameBoard.grid.forEach(cell => {
-    cell.addEventListener("click", () => {
-      if(hoverEffect){
-        cell.style.color = "rgb(245, 245, 245,1)"
-        hoverEffect = false;
-        checkWinner(activePlayer);
-
-        let temp = activePlayer;
-        activePlayer = inactivePlayer;
-        inactivePlayer = temp;
-
-      }
+      });
     });
-  });
-
+  
+  }
+  
   const reset = () => {
     activePlayer = playerOne;
     inactivePlayer = playerTwo;
     hoverEffect = false;
   }
 
+  //Creats a gameflow object with the reset function 
+  //to help reset the grid, and active/inactive players.
   return {reset}
 })(playerOne,playerTwo);
 
@@ -72,10 +80,13 @@ function checkWinner(activePlayer){
     document.querySelector(".gameover > div").textContent = `${activePlayer.name} Wins!`;
     document.querySelector(".gameover").style.display = "flex";
     document.querySelector(".main").style.filter = "Blur(5px)";
+    return activePlayer == playerOne ? 1 : -1;
   }else if(checkBoardFilled()){
     document.querySelector(".gameover > div").textContent = "TIE!";
     document.querySelector(".gameover").style.display = "flex";
     document.querySelector(".main").style.filter = "Blur(5px)";
+
+    return 0;
   }
   function checkRow(activePlayer){
     for(row of document.querySelectorAll("tr")){
@@ -139,25 +150,35 @@ const settings = (() => {
   })
 
   document.querySelector(".settings-btn > button").addEventListener("click",() => {
-    applyStyle(playerOne,playerTwo);
+    applyStyle();
   })
 
   document.querySelector(".settings-btn > button:last-child").addEventListener("click",() => {
+    if(playerTwo != computer){
+      playerTwoInput.enable();
+      document.querySelector("input[name='opponent']").checked = true;
+    }else{
+      playerTwoInput.disable();
+      document.querySelector("input[name='opponent']:last-of-type").checked = true;
+    }
     document.querySelector(".settings-wrapper").style.display = "none";
     document.querySelector(".main").style.filter = "none";
-    clearSettings();
   })
 
-  function applyStyle(playerOne,playerTwo){
+  function applyStyle(){
     let oldSignOne = playerOne.sign;
     let oldSignTwo = playerTwo.sign;
   
     playerOne.name = document.querySelector("#playerOneName").value;
     playerOne.sign = document.querySelector("#playerOneSign").value;
-  
-    playerTwo.name = document.querySelector("#playerTwoName").value;
-    playerTwo.sign = document.querySelector("#playerTwoSign").value;
-  
+
+    if(document.querySelector("input[name='opponent'").checked == true){
+      playerTwo = Player(document.querySelector("#playerTwoName").textContent, 
+      document.querySelector("#playerTwoSign").textContent);
+    }else{
+      playerTwo = computer;
+    }
+    
     gameBoard.grid.forEach(cell => {
       if(cell.textContent == oldSignOne){
         cell.textContent = playerOne.sign;
@@ -167,24 +188,26 @@ const settings = (() => {
     })
   }
   
-  function clearSettings(){
-    document.querySelectorAll(".settings input").forEach(inp => inp.value = "");
-  }
+  const playerTwoInput = (() => {
+
+    const disable = () => {
+      document.querySelector("#playerTwoName").disabled = true;
+      document.querySelector("#playerTwoSign").disabled = true;
+    }
+  
+    const enable = () => {
+      document.querySelector("#playerTwoName").disabled = false;
+      document.querySelector("#playerTwoSign").disabled = false;
+    }
+  
+    document.querySelector("input[name='opponent']").addEventListener("click",enable);
+    document.querySelector("input[name='opponent']:last-of-type").addEventListener("click",disable);
+
+    return {enable,disable}
+  })();
+
+  
 })();
-
-const playerTwoInput = (() => {
-  const disable = () => {
-    document.querySelector("#playerTwoName").disabled = true;
-    document.querySelector("#playerTwoSign").disabled = true;
-  }
-
-  const enable = () => {
-    document.querySelector("#playerTwoName").disabled = false;
-    document.querySelector("#playerTwoSign").disabled = false;
-  }
-
-  return {enable,disable}
-})()
 
 document.querySelector(".gameover > div:last-child").addEventListener("click",reset);
 document.querySelector(".header > div").addEventListener("click",reset);
@@ -195,3 +218,42 @@ function reset(){
   document.querySelector(".main").style.filter = "none";
   gameFlow.reset();
 }
+
+
+//Choose random available spot
+// function computerMove(){
+//   let move = Math.floor(Math.random()*gameBoard.grid.length) + 1;
+
+//   if(gameBoard.grid[move].textContent == ""){
+//     gameBoard.grid[move].textContent = computer.sign;
+//     activePlayer = playerOne;
+//     inactivePlayer = computer;
+//   }else{
+//     computerMove();
+//   }
+// }
+
+// function minmax(){
+//   //If it is a terminal state
+//   if(checkWinner() != undefined){
+//     return checkWinner();
+//   }
+
+//   //Maximising Player
+//   if(activePlayer == playerOne){
+//     maxValue = -Infinity;
+//     for(cell of gameBoard){
+//       maxValue = Math.max(maxValue,minmax())
+//     }
+//     return maxValue;
+//   }
+
+//   if(activePlayer == computer){
+//     minValue = Infinity;
+//     for(cell of gameBoard){
+//       minValue = Math.min(minValue, minmax())
+//     }
+//     return minValue;
+//   }
+// }
+
