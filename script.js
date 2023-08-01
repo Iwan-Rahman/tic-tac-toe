@@ -14,8 +14,8 @@ const gameBoard = (() => {
 const Player = (name, sign, isComputer = false) => {
   return {name, sign, isComputer};
 }
-var playerOne = Player("Bob","X");
-var playerTwo = Player("Tom","O");
+var playerOne = Player("Player 1","X");
+var playerTwo = Player("Player 2","O");
 
 const gameFlow = ((playerOne, playerTwo) => {
   //Player one starts the game
@@ -262,17 +262,34 @@ const settings = (() => {
   function applyStyle(){
     let oldSignOne = playerOne.sign;
     let oldSignTwo = playerTwo.sign;
-    
     playerOne.name = document.querySelector("#playerOneName").value;
     playerOne.sign = document.querySelector("#playerOneSign").value;
 
     if(document.querySelector("input[name='opponent'").checked == true){
-      playerTwo = Player(document.querySelector("#playerTwoName").textContent, 
-      document.querySelector("#playerTwoSign").textContent);
+      playerTwo.name = document.querySelector("#playerTwoName").value;
+      playerTwo.sign = document.querySelector("#playerTwoSign").value;
+      playerTwo.isComputer = false;
     }else{
+      playerTwo.name = "Computer";
+      playerTwo.sign = "O";
       playerTwo.isComputer = true;
     }
-    
+
+    if(playerOne.name == playerTwo.name || playerOne.sign == playerTwo.sign || 
+      playerOne.sign == "" || playerTwo.sign == ""){
+      alert("ERROR: You are a cheater!");
+      playerOne.name = "Player 1";
+      playerOne.sign = "X";
+      if(playerTwo.isComputer == true){
+        playerTwo.name = "Computer";
+        playerTwo.sign = "O";
+        playerTwo.isComputer = true;
+      }else{
+        playerTwo.name = "Player 2";
+        playerTwo.sign = "O";
+      }
+    }
+
     gameBoard.grid.forEach(cell => {
       if(cell.textContent == oldSignOne){
         cell.textContent = playerOne.sign;
@@ -312,3 +329,4 @@ function reset(){
   document.querySelector(".main").style.filter = "none";
   gameFlow.reset();
 }
+
