@@ -56,7 +56,7 @@ const gameFlow = ((playerOne, playerTwo) => {
           inactivePlayer = temp;
   
           if(activePlayer.isComputer == true){
-            computerMove()
+            bestComputerMove()
           }
         }
       }
@@ -64,8 +64,8 @@ const gameFlow = ((playerOne, playerTwo) => {
   });
   
   
-  //Choose random available spot
-function computerMove(){
+  //Choose random available spot (Pick a random move.)
+/*function computerMove(){
   let move = Math.floor(Math.random()*gameBoard.grid.length);
 
   if(gameBoard.grid[move].textContent == ""){
@@ -77,6 +77,74 @@ function computerMove(){
   }else{
     computerMove();
   }
+}*/
+
+function bestComputerMove(){
+  let bestScore = -Infinity;
+  let bestMove;
+  let maximizingPlayer = activePlayer;
+  let minimizingPlayer = inactivePlayer;
+
+  for(let cell of gameBoard.grid){
+    if(cell.textContent == ""){
+      cell.textContent = maximizingPlayer.sign;
+      let score = minimax(gameBoard.grid,0,false);
+      cell.textContent = "";
+      if(score > bestScore){
+        bestScore = score;
+        bestMove = cell;
+      }
+    }
+  }
+
+  bestMove.textContent = activePlayer.sign;
+  let temp = activePlayer;
+  activePlayer = inactivePlayer;
+  inactivePlayer = temp;
+
+  function minimax(board,depth,isMaximizing){
+    let score;
+    if(isMaximizing){
+      //True -> Game is won
+      //False -> Game is lost
+      //Undefined -> Game is incomplete
+      let result = checkWinner(minimizingPlayer);
+      if(result != undefined) result ? score = -1 : score = 0;
+    }else{
+      let result = checkWinner(maximizingPlayer);
+      if(result != undefined) reset ? score = 1 : score = 0;
+    }
+    
+    //check for terminal state
+    if(score != undefined){
+      return score;
+    }
+    
+    if(isMaximizing){
+      let bestScore = -Infinity;
+      for(let cell of gameBoard.grid){
+        if(cell.textContent == ""){
+          cell.textContent = activePlayer.sign;
+          let score = minimax(board,depth + 1, false);
+          cell.textContent = "";
+          bestScore = Math.max(score, bestScore);
+        }
+      }
+      return bestScore;
+    }else{
+      let bestScore = Infinity;
+      for(let cell of gameBoard.grid){
+        if(cell.textContent == ""){
+          cell.textContent = inactivePlayer.sign;
+          let score = minimax(board,depth + 1, true);
+          cell.textContent = "";
+          bestScore = Math.min(score,bestScore);
+        }
+      }
+      return bestScore;
+    }
+  }
+  
 }
 
 
@@ -93,19 +161,18 @@ function computerMove(){
 
 function checkWinner(activePlayer){
   if(checkRow(activePlayer) || checkCol(activePlayer) || checkDiag(activePlayer)){
-    document.querySelector(".gameover > div").textContent = `${activePlayer.name} Wins!`;
-    document.querySelector(".gameover").style.display = "flex";
-    document.querySelector(".main").style.filter = "Blur(5px)";
-    return activePlayer == playerOne ? 1 : -1;
+    // document.querySelector(".gameover > div").textContent = `${activePlayer.name} Wins!`;
+    // document.querySelector(".gameover").style.display = "flex";
+    // document.querySelector(".main").style.filter = "Blur(5px)";
+    return true;
   }else if(checkBoardFilled()){
-    document.querySelector(".gameover > div").textContent = "TIE!";
-    document.querySelector(".gameover").style.display = "flex";
-    document.querySelector(".main").style.filter = "Blur(5px)";
-
-    return 0;
+    // document.querySelector(".gameover > div").textContent = "TIE!";
+    // document.querySelector(".gameover").style.display = "flex";
+    // document.querySelector(".main").style.filter = "Blur(5px)";
+    return false;
   }
   function checkRow(activePlayer){
-    for(row of document.querySelectorAll("tr")){
+    for(let row of document.querySelectorAll("tr")){
       let totalRowSigns = Array.from(row.querySelectorAll("td")).reduce((total, cell) => {
         return total += (cell.textContent == activePlayer.sign); 
       },0)
@@ -234,31 +301,3 @@ function reset(){
   document.querySelector(".main").style.filter = "none";
   gameFlow.reset();
 }
-
-
-
-
-// function minmax(){
-//   //If it is a terminal state
-//   if(checkWinner() != undefined){
-//     return checkWinner();
-//   }
-
-//   //Maximising Player
-//   if(activePlayer == playerOne){
-//     maxValue = -Infinity;
-//     for(cell of gameBoard){
-//       maxValue = Math.max(maxValue,minmax())
-//     }
-//     return maxValue;
-//   }
-
-//   if(activePlayer == computer){
-//     minValue = Infinity;
-//     for(cell of gameBoard){
-//       minValue = Math.min(minValue, minmax())
-//     }
-//     return minValue;
-//   }
-// }
-
