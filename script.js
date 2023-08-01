@@ -1,3 +1,7 @@
+const Player = (name, sign, isComputer = false) => {
+  return {name, sign, isComputer};
+}
+
 const gameBoard = (() => {
   grid = document.querySelectorAll("td");
 
@@ -5,24 +9,24 @@ const gameBoard = (() => {
     grid.forEach(cell => {
       cell.textContent = "";
     })
-
     document.querySelector(".gameover > div").textContent = "";
   }
+
   return {grid,clear};
 })();
 
-const Player = (name, sign, isComputer = false) => {
-  return {name, sign, isComputer};
-}
 var playerOne = Player("Player 1","X");
 var playerTwo = Player("Player 2","O");
 
+
+//This module creates turn system, that allows switching between the players
 const gameFlow = ((playerOne, playerTwo) => {
   //Player one starts the game
   let activePlayer = playerOne;
   let inactivePlayer = playerTwo;
   let hoverEffect = false;
 
+  //Creates the highlight effect when hovering over a grid cell 
   const highlight = (() => {
     gameBoard.grid.forEach(cell => {
       cell.addEventListener("mouseenter", () => {
@@ -43,13 +47,14 @@ const gameFlow = ((playerOne, playerTwo) => {
 
   })();
 
+  //PLaces the marker/sign onto the board that the hover effect displayed
   gameBoard.grid.forEach(cell => {
     cell.addEventListener("click", () => {
       if (hoverEffect) {
         cell.style.color = "rgb(245, 245, 245,1)"
         hoverEffect = false;
 
-        
+        //Checks for winners and switches turns
         if(checkWinner(activePlayer) == undefined){
           let temp = activePlayer;
           activePlayer = inactivePlayer;
@@ -71,22 +76,8 @@ const gameFlow = ((playerOne, playerTwo) => {
     });
   });
   
-  
-  //Choose random available spot (Pick a random move.)
-/*function computerMove(){
-  let move = Math.floor(Math.random()*gameBoard.grid.length);
 
-  if(gameBoard.grid[move].textContent == ""){
-    gameBoard.grid[move].textContent = activePlayer.sign;
-    checkWinner(activePlayer);
-    let temp = activePlayer;
-    activePlayer = inactivePlayer;
-    inactivePlayer = temp;
-  }else{
-    computerMove();
-  }
-}*/
-
+//Utilizes the minmax algorithim to choose an optimal move.
 function bestComputerMove(){
   let bestScore = -Infinity;
   let bestMove;
@@ -110,9 +101,10 @@ function bestComputerMove(){
   function minimax(board,depth,isMaximizing){
     let score;
     if(isMaximizing){
-      //True -> Game is won
-      //False -> Game is lost
-      //Undefined -> Game is incomplete
+      /*Result Values:
+      True -> Game is won
+      False -> Game is lost
+      Undefined -> Game is incomplete */
       let result = checkWinner(minimizingPlayer);
       if(result != undefined) result ? score = -1 : score = 0;
     }else{
@@ -151,7 +143,6 @@ function bestComputerMove(){
   }
   
 }
-
 
   //Creats a gameflow object with the reset function 
   //to help reset the grid, and active/inactive players.
@@ -225,6 +216,9 @@ function checkWinner(activePlayer){
 
 };
 
+  /*Only the checkGameOver function displays 
+  the game over screen in order to prevent triggering a game over,
+  while the computer is calculating its move */
 function checkGameOver(player){
   if(checkWinner(player) == true){
     document.querySelector(".gameover > div").textContent = `${player.name} Wins!`;
@@ -238,6 +232,9 @@ function checkGameOver(player){
 }
 
 const settings = (() => {
+  document.querySelector(".gameover > div:last-child").addEventListener("click",reset);
+  document.querySelector(".header img:last-child").addEventListener("click",reset);
+  
   document.querySelector("img").addEventListener("click",() => {
     document.querySelector(".settings-wrapper").style.display = "flex";
     document.querySelector(".main").style.filter = "Blur(5px)";
@@ -320,13 +317,26 @@ const settings = (() => {
   
 })();
 
-document.querySelector(".gameover > div:last-child").addEventListener("click",reset);
-document.querySelector(".header img:last-child").addEventListener("click",reset);
-
 function reset(){
   gameBoard.clear();
   document.querySelector(".gameover").style.display = "none";
   document.querySelector(".main").style.filter = "none";
   gameFlow.reset();
 }
+
+/*Unused, kept this for reference if I were to add multiple bots */
+//Choose random available spot (Pick a random move.)
+/*function computerMove(){
+  let move = Math.floor(Math.random()*gameBoard.grid.length);
+
+  if(gameBoard.grid[move].textContent == ""){
+    gameBoard.grid[move].textContent = activePlayer.sign;
+    checkWinner(activePlayer);
+    let temp = activePlayer;
+    activePlayer = inactivePlayer;
+    inactivePlayer = temp;
+  }else{
+    computerMove();
+  }
+}*/
 
