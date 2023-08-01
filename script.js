@@ -57,8 +57,16 @@ const gameFlow = ((playerOne, playerTwo) => {
   
           if(activePlayer.isComputer == true){
             bestComputerMove()
+            let temp = activePlayer;
+            activePlayer = inactivePlayer;
+            inactivePlayer = temp;
+            checkGameOver(inactivePlayer);
           }
+        }else{
+          checkGameOver(activePlayer);
         }
+
+        
       }
     });
   });
@@ -98,9 +106,6 @@ function bestComputerMove(){
   }
 
   bestMove.textContent = activePlayer.sign;
-  let temp = activePlayer;
-  activePlayer = inactivePlayer;
-  inactivePlayer = temp;
 
   function minimax(board,depth,isMaximizing){
     let score;
@@ -161,14 +166,8 @@ function bestComputerMove(){
 
 function checkWinner(activePlayer){
   if(checkRow(activePlayer) || checkCol(activePlayer) || checkDiag(activePlayer)){
-    // document.querySelector(".gameover > div").textContent = `${activePlayer.name} Wins!`;
-    // document.querySelector(".gameover").style.display = "flex";
-    // document.querySelector(".main").style.filter = "Blur(5px)";
     return true;
   }else if(checkBoardFilled()){
-    // document.querySelector(".gameover > div").textContent = "TIE!";
-    // document.querySelector(".gameover").style.display = "flex";
-    // document.querySelector(".main").style.filter = "Blur(5px)";
     return false;
   }
   function checkRow(activePlayer){
@@ -225,6 +224,18 @@ function checkWinner(activePlayer){
   }
 
 };
+
+function checkGameOver(player){
+  if(checkWinner(player) == true){
+    document.querySelector(".gameover > div").textContent = `${player.name} Wins!`;
+    document.querySelector(".gameover").style.display = "flex";
+    document.querySelector(".main").style.filter = "Blur(5px)";
+  }else if(checkWinner(player) == false){
+    document.querySelector(".gameover > div").textContent = "TIE!";
+    document.querySelector(".gameover").style.display = "flex";
+    document.querySelector(".main").style.filter = "Blur(5px)";
+  }
+}
 
 const settings = (() => {
   document.querySelector("img").addEventListener("click",() => {
