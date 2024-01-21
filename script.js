@@ -272,9 +272,7 @@ const settings = (() => {
       playerTwo.isComputer = true;
     }
 
-    if(playerOne.name == playerTwo.name || playerOne.sign == playerTwo.sign || 
-      playerOne.sign == "" || playerTwo.sign == ""){
-      alert("ERROR: You are a cheater!");
+    function reset(){
       playerOne.name = "Player 1";
       playerOne.sign = "X";
       if(playerTwo.isComputer == true){
@@ -286,7 +284,13 @@ const settings = (() => {
         playerTwo.sign = "O";
       }
     }
-
+    if(playerOne.name == "" || playerTwo.name == "" || playerOne.sign == "" || playerTwo.sign == ""){
+      alert("Both players must have a valid name and sign");
+      reset();
+    }else if(playerOne.name == playerTwo.name || playerOne.sign == playerTwo.sign){
+      alert("Both players cannot have the same name or sign");
+      reset();
+    }
     gameBoard.grid.forEach(cell => {
       if(cell.textContent == oldSignOne){
         cell.textContent = playerOne.sign;
@@ -294,6 +298,7 @@ const settings = (() => {
         cell.textContent = playerTwo.sign;
       }
     })
+    
   }
   
   const playerTwoInput = (() => {
@@ -301,6 +306,8 @@ const settings = (() => {
     const disable = () => {
       document.querySelector("#playerTwoName").disabled = true;
       document.querySelector("#playerTwoSign").disabled = true;
+      document.querySelector("#playerTwoName").value = "Computer";
+      document.querySelector("#playerTwoSign").value = "O";
     }
   
     const enable = () => {
@@ -314,7 +321,9 @@ const settings = (() => {
     return {enable,disable}
   })();
 
-  
+  //Change default to computer start
+  document.querySelector("input[name='opponent']:last-of-type").click();
+  applyStyle();
 })();
 
 function reset(){
@@ -323,20 +332,4 @@ function reset(){
   document.querySelector(".main").style.filter = "none";
   gameFlow.reset();
 }
-
-/*Unused, kept this for reference if I were to add multiple bots */
-//Choose random available spot (Pick a random move.)
-/*function computerMove(){
-  let move = Math.floor(Math.random()*gameBoard.grid.length);
-
-  if(gameBoard.grid[move].textContent == ""){
-    gameBoard.grid[move].textContent = activePlayer.sign;
-    checkWinner(activePlayer);
-    let temp = activePlayer;
-    activePlayer = inactivePlayer;
-    inactivePlayer = temp;
-  }else{
-    computerMove();
-  }
-}*/
 
